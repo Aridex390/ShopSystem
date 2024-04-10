@@ -42,14 +42,14 @@ public class User implements Serializable {
     @Column(nullable = false)
     protected boolean hasActiveShop = false;
     /** Reference to the shop */
-    @OneToOne(mappedBy = "id")
-    protected Shop shop;
+    /*@OneToOne(mappedBy = "id")
+    protected Shop shop;*/
 
     public User() {
     }
 
     public User(String firstname, String lastname, String email, String phoneNumber, String username, String password,
-                boolean isUserActive, boolean hasActiveShop, Shop shop) {
+                boolean isUserActive, boolean hasActiveShop/*, Shop shop*/) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -58,7 +58,7 @@ public class User implements Serializable {
         this.password = password;
         this.isUserActive = isUserActive;
         this.hasActiveShop = hasActiveShop;
-        this.shop = shop;
+        //this.shop = shop;
     }
 
     public Long getId() {
@@ -132,7 +132,7 @@ public class User implements Serializable {
     public void setHasActiveShop(boolean hasActiveShop) {
         this.hasActiveShop = hasActiveShop;
     }
-
+/*
     public Shop getShop() {
         return shop;
     }
@@ -140,7 +140,7 @@ public class User implements Serializable {
     public void setShop(Shop shop) {
         this.shop = shop;
     }
-
+*/
     @Override
     public String toString() {
         return "User{" +

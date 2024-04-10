@@ -23,9 +23,9 @@ public class Shop implements Serializable {
     /** logo URL of the Shop */
     protected String logoUrl;
     /** Reference to the User */
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    protected User user;
+    //@OneToOne(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "user_id", referencedColumnName = "id")
+    //protected User user;
 
     public Shop() {
     }
@@ -36,15 +36,14 @@ public class Shop implements Serializable {
      * @param shopName the name of the Shop
      */
     public Shop(String shopName, User user) {
-        new Shop(shopName, "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.creativefabrica.com%2Fde%2Fproduct%2Fmountain-logo-design-52%2F&psig=AOvVaw2ypsGaPGZ5ubZzAH-amlcV&ust=1712784756916000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCKjdhcqKtoUDFQAAAAAdAAAAABAJ",
-                user);
+        new Shop(shopName, "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.creativefabrica.com%2Fde%2Fproduct%2Fmountain-logo-design-52%2F&psig=AOvVaw2ypsGaPGZ5ubZzAH-amlcV&ust=1712784756916000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCKjdhcqKtoUDFQAAAAAdAAAAABAJ"/*, user*/);
     }
 
-    public Shop(String shopName, String logoUrl, User user) {
+    public Shop(String shopName, String logoUrl/*,User user*/) {
         this.shopName = shopName;
 
         this.logoUrl = logoUrl;
-        this.user = user;
+        //this.user = user;
     }
 
     public Long getId() {
@@ -70,7 +69,7 @@ public class Shop implements Serializable {
     public void setLogoUrl(String logoUrl) {
         this.logoUrl = logoUrl;
     }
-
+/*
     public User getUser() {
         return user;
     }
@@ -78,7 +77,7 @@ public class Shop implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-
+*/
     @Override
     public String toString() {
         return "Shop{" +
