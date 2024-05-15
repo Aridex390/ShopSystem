@@ -1,11 +1,17 @@
 package com.oop2.backend.Product.model;
 
 import com.oop2.backend.Product.model.Enums.Currency;
+import com.oop2.backend.order.model.Cart;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.LinkedHashSet;
+
+
 import java.util.Objects;
-import java.util.Set;
+
 
 /**
  * This class ist the hold the Information's about a product
@@ -13,6 +19,10 @@ import java.util.Set;
  * @author Florian Reining
  * @version 1.0
  */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "product")
 public class Product {
@@ -30,86 +40,11 @@ public class Product {
     /** Price for the product (0.00 €/$) @{@link Double}*/
     private double price;
     /** Currency for the product @{@link Currency}*/
+    @Enumerated(EnumType.STRING)
     private Currency currency = Currency.DOLLAR;
-    /** Association to @{@link ProductConfig} and saved as a @{@link Set} */
-    @OneToMany(mappedBy = "product", orphanRemoval = true)
-    private Set<ProductConfig> productConfigs = new LinkedHashSet<>();
-
-    public Product() {
-    }
-
-    public Product(String name, double weight, String description, double price, Currency currency, Set<ProductConfig> productConfigs) {
-        this.name = name;
-        this.weight = weight;
-        this.description = description;
-        this.price = price;
-        this.currency = currency;
-        this.productConfigs = productConfigs;
-    }
-
-    public Product(String name, String description, double weight, double price, Set<ProductConfig> productConfigs) {
-        this.name = name;
-        this.description = description;
-        this.weight = weight;
-        this.price = price;
-        this.productConfigs = productConfigs;
-    }
-
-    public Set<ProductConfig> getProductConfigs() {
-        return productConfigs;
-    }
-
-    public void setProductConfigs(Set<ProductConfig> productConfigs) {
-        this.productConfigs = productConfigs;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
+    /** Association to @{@link com.oop2.backend.order.model.Cart} */
+    @OneToOne(mappedBy = "product")
+    private Cart cart;
 
     @Override
     public boolean equals(Object o) {
@@ -132,7 +67,6 @@ public class Product {
                 ", weight=" + weight +
                 ", price=" + price +
                 ", currency=" + currency +
-                ", productConfigs=" + productConfigs +
                 ", id=" + id +
                 '}';
     }
