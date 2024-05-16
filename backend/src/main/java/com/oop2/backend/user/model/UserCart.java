@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
  * @author Florian Reining
  * @version 1.0
  */
-// TODO: Documentation
 @Data
 @Builder
 @AllArgsConstructor
@@ -29,11 +28,12 @@ public class UserCart {
     @Column(name = "id", nullable = false)
     private Long id;
     /** the quantity of a  product. */
-    private int quantity;
+    private int quantity = 1;
     /** Association to @{@link com.oop2.backend.user.model.User} */
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    /** Association to @{@link Product} */
     @OneToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;

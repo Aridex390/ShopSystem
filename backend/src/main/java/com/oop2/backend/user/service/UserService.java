@@ -9,11 +9,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-// TODO: Documentation
 
+/**
+ * This service class handles all the action for a @{@link User} and his @{@link UserCart}.
+ *
+ * @author Florian Reining
+ * @version 1.0
+ */
 @Service
 public class UserService {
+    /** Dependency to @{@link com.oop2.backend.user.repo.UserRepo} */
     private final UserRepo userRepo;
+    /** Dependency to @{@link com.oop2.backend.user.repo.UserCartRepo} */
     private final UserCartRepo userCartRepo;
 
     @Autowired
@@ -22,6 +29,12 @@ public class UserService {
         this.userCartRepo = userCartRepo;
     }
 
+    /**
+     * The method select every product from the user cart.
+     *
+     * @param user takes a complete @{@link User}.
+     * @return a list of the products saved in a cart.
+     */
     public List<UserCart> getUserCart(User user) {
         List<UserCart> userCarts = new ArrayList<>();
         for (UserCart userCart : userCartRepo.findAll()) {
@@ -32,16 +45,24 @@ public class UserService {
         return userCarts;
     }
 
+    /**
+     * This method add a new product to the card if its doesn't
+     * exist at the moment.
+     * </p> If the product is currently added, the quantity of the product
+     * will be increased by 1 with @{@systemProperty increaseQuantity}.
+     *
+     * @param user takes a complete @{@link User}.
+     * @param userCart takes a complete @{@link UserCart}.
+     * @return the new cart List for the user
+     */
     public List<UserCart> addUserCart(User user, UserCart userCart) {
         List<UserCart> userCarts = getUserCart(user);
         UserCart userCart1;
         for (UserCart userCart2 : userCarts) {
-            int i = 0;
             if(userCart2.equals(userCart)) {
-                userCart1 = higherQuantity(userCart);
+                userCart1 = increaseQuantity(userCart);
                 userCarts.remove(userCart);
                 userCarts.add(userCart1);
-                userCartRepo.save(userCart);
             } else {
                 userCarts.add(userCart);
                 userCartRepo.save(userCart);
@@ -50,6 +71,14 @@ public class UserService {
         return userCarts;
     }
 
+    /**
+     * This method creates a new @{@link User}. But before the Email will check, to avoid
+     * duplicate Emails.
+     *
+     * @param user takes all currently saved Information's about the @{@link User}.
+     * @return the new added user for an auto login after the sign-up process.
+     * Or null if the Email of the User is taken.
+     */
     public User addUser(User user) {
         if (!userRepo.existsByEmail(user.getEmail())) {
             return userRepo.save(user);
@@ -57,15 +86,66 @@ public class UserService {
         return null;
     }
 
-    public UserCart higherQuantity(UserCart userCart) {
+    /**
+     * This method increase the quantity by 1.
+     *
+     * @param userCart Takes the complete @{@link UserCart}
+     * @return the product as @{@link UserCart} with the increased quantity.
+     */
+    public UserCart increaseQuantity(UserCart userCart) {
         int quantity = userCart.getQuantity();
         quantity++;
-        return userCart;
+        userCart.setQuantity(quantity);
+        return userCartRepo.save(userCart);
     }
 
-    public UserCart lowerQuantity(UserCart userCart) {
+    /**
+     * This methode decrease the quantity by 1.
+     *
+     * @param userCart Takes the complete @{@link UserCart}
+     * @return the product as @{@link UserCart} with the decreased quantity.
+     */
+    public UserCart decreaseQuantity(UserCart userCart) {
         int quantity = userCart.getQuantity();
-        quantity++;
-        return userCart;
+        quantity--;
+        if (quantity <= 0) {
+            deleteUserCart(userCart);
+            return null;
+        } else {
+            userCart.setQuantity(quantity);
+            return userCartRepo.save(userCart);
+        }
+    }
+
+    /**
+     *
+     * @param userCart Takes the complete @{@link UserCart}
+     * @return the new list of products in a cart.
+     */
+    public List<UserCart> deleteUserCart(UserCart userCart) {
+        userCartRepo.delete(userCart);
+        User user = userCart.getUser();
+
+        return getUserCart(getUserById(user.getId()));
+    }
+
+    /**
+     * The methode gets a User
+     *
+     * @param id takes the user id as a Long
+     * @return a user if existing instead it returns null
+     */
+    private User getUserById(Long id) {
+        return userRepo.findById(id).orElse(null);
+    }
+
+    /**
+     * The methode delete a user and his card.
+     *
+     * @param user takes a complete @{@link User}.
+     */
+    public void deleteUser(User user) {
+        // TODO: Add functionality to clean the user cart before deleting the user
+        userRepo.delete(user);
     }
 }

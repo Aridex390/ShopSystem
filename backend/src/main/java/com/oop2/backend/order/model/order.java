@@ -20,7 +20,6 @@ import java.util.List;
  * @author Florian Reining
  * @version 1.0
  */
-// TODO: Documentation
 @Data
 @Builder
 @NoArgsConstructor
@@ -47,6 +46,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    /** Association to @{@link Cart} saved as an @{@link List} */
     @OneToMany(mappedBy = "order", orphanRemoval = true)
     private List<Cart> cart;
 }
