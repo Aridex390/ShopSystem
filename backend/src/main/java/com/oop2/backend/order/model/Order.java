@@ -1,5 +1,6 @@
 package com.oop2.backend.order.model;
 
+
 import com.oop2.backend.order.model.enums.Status;
 import com.oop2.backend.order.model.enums.StatusPayment;
 import com.oop2.backend.user.model.User;
@@ -20,7 +21,6 @@ import java.util.List;
  * @author Florian Reining
  * @version 1.0
  */
-// TODO: Documentation
 @Data
 @Builder
 @NoArgsConstructor
@@ -47,6 +47,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    /** Association to @{@link Cart} saved as an @{@link List} */
     @OneToMany(mappedBy = "order", orphanRemoval = true)
     private List<Cart> cart;
 }
+

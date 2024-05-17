@@ -21,7 +21,6 @@ import java.util.function.Function;
  * @author Florian Reining
  * @version 1.0
  */
-// TODO: Documentation
 @Service
 public class JwtService {
     /** this secret key is used to decrypt and encrypt the jwt token */
@@ -37,19 +36,48 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+    /**
+     * The generic methode extract saved @{@link Claims} / information in a JWT Token.
+     * In this case it can be the username / email or the expiration date
+     *
+     * @param token takes the JWT token from expressly created for a user
+     * @param claimsResolver holds a function of the class @{@link Claims}
+     * @return re
+     * @param <T> is generic placeholder ad takes a datatype of @{@link Claims}
+     */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
 
+    /**
+     * The methode extract the date of expiration for the later validation.
+     *
+     * @param token takes the JWT token from expressly created for a user.
+     * @return return the date of expiration for a JWT toke as @{@link Date}.
+     */
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    /**
+     * The method is overloaded and generate a new JWT toke for the user.
+     *
+     * @param userDetails takes a user as @{@link UserDetails}
+     * @return a generated token that's encoded with a secret key and HS256 algorithm as @{@link String}
+     */
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
+    /**
+     * The methode generate a new JWT toke for the user.
+     * The Token is manipulated with the username and the claims as List.
+     *
+     * @param claims is a @{@link HashMap} for save extra claims.
+     * @param userDetails takes a user as @{@link UserDetails} to save the neede Subjects
+     * @return  a generated token that's encoded with a secret key and HS256 algorithm as @{@link String}
+     */
     public String generateToken(Map<String, Object> claims, UserDetails userDetails) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -60,6 +88,12 @@ public class JwtService {
                 .compact();
     }
 
+    /**
+     * The methode extract all claims from a JWT token.
+     *
+     * @param token takes the JWT token from expressly created for a user.
+     * @return the @{@link Claims} from a token.
+     */
     private Claims getClaimsFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSignInKey())
@@ -68,15 +102,34 @@ public class JwtService {
                 .getBody();
     }
 
+    /**
+     * The Methode returns the Key decoded as BASE64.
+     *
+     * @return te sign in key as @{@link Key}
+     */
     private Key getSignInKey() {
         byte[] keyByte = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyByte);
     }
 
+    /**
+     * The methode checks if a token is expired.
+     *
+     * @param token the JWT token for a user
+     * @return true if the token is 24 or more hours old. Fals is the token is younger than 24 hours.
+     */
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
+    /**
+     * The methode checks if a JWT token is for the user and if the token is
+     *  expired.
+     *
+     * @param token takes the JWT token from a user
+     * @param userDetails the user as @{@link UserDetails}
+     * @return true if the token is valid or fals if the token isn't valid
+     */
     public boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractEmail(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
