@@ -1,5 +1,6 @@
 package com.oop2.backend.user.repo;
 
+import com.oop2.backend.user.model.User;
 import com.oop2.backend.user.model.UserCart;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,4 +11,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @version 1.0
  */
 public interface UserCartRepo extends JpaRepository<UserCart, Long> {
+    void deleteAllByUser(User user);
 }

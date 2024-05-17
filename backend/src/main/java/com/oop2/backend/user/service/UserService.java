@@ -1,5 +1,6 @@
 package com.oop2.backend.user.service;
 
+import com.oop2.backend.user.model.Enum.Role;
 import com.oop2.backend.user.model.User;
 import com.oop2.backend.user.model.UserCart;
 import com.oop2.backend.user.repo.UserCartRepo;
@@ -14,7 +15,7 @@ import java.util.List;
  * This service class handles all the action for a @{@link User} and his @{@link UserCart}.
  *
  * @author Florian Reining
- * @version 1.0
+ * @version 1.1
  */
 @Service
 public class UserService {
@@ -140,12 +141,26 @@ public class UserService {
     }
 
     /**
-     * The methode delete a user and his card.
+     * The methode delete a user and his cart.
      *
      * @param user takes a complete @{@link User}.
      */
     public void deleteUser(User user) {
-        // TODO: Add functionality to clean the user cart before deleting the user
+        userCartRepo.deleteAllByUser(user);
         userRepo.delete(user);
+    }
+
+    /**
+     * The methode check the role of User.
+     *
+     * @param user takes a complete @{@link User}
+     * @return the @{@link Role} of a User
+     */
+    public Role checkRole(User user) {
+        if (user.getRole().equals(Role.ADMIN)) {
+            return Role.ADMIN;
+        } else {
+            return Role.USER;
+        }
     }
 }

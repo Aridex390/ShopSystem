@@ -2,13 +2,16 @@ package com.oop2.backend.order.service;
 
 import com.oop2.backend.order.model.Cart;
 import com.oop2.backend.order.model.Order;
+import com.oop2.backend.order.model.enums.StatusPayment;
 import com.oop2.backend.order.repo.CartRepo;
 import com.oop2.backend.order.repo.OrderRepo;
 import com.oop2.backend.user.model.User;
 import com.oop2.backend.user.model.UserCart;
+import com.oop2.backend.user.repo.UserCartRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +22,7 @@ import java.util.List;
  * except the status.
  *
  * @author Florian Reining
- * @version 1.0
+ * @version 1.1
  */
 @Service
 public class OrderService {
@@ -27,11 +30,14 @@ public class OrderService {
     private final OrderRepo orderRepo;
     /** Dependency to @{@link CartRepo} */
     private final CartRepo cartRepo;
+    /** Dependency to @{@link UserCartRepo} */
+    private final UserCartRepo userCartRepo;
 
     @Autowired
-    public OrderService(OrderRepo orderRepo, CartRepo cartRepo) {
+    public OrderService(OrderRepo orderRepo, CartRepo cartRepo, UserCartRepo userCartRepo) {
         this.orderRepo = orderRepo;
         this.cartRepo = cartRepo;
+        this.userCartRepo = userCartRepo;
     }
 
     /**
@@ -45,7 +51,7 @@ public class OrderService {
         for (UserCart cart : carts) {
             Cart cart1 = new Cart(cart.getQuantity(), order, cart.getProduct());
             cartRepo.save(cart1);
-            // TODO: clear the User cart after the order creation.
+            userCartRepo.delete(cart);
         }
         return orderRepo.save(order);
 
@@ -94,6 +100,24 @@ public class OrderService {
         orderRepo.updateOrder(order);
     }
 
-    // TODO: payment validation
+    /**
+     * This methode checks the current payment status of an order.
+     *
+     * @param order takes a complete order
+     * @return returns the current payment status
+     */
+    public StatusPayment checkPayment(Order order) {
+        if(order.getPaymentStatus().equals(StatusPayment.PAYED)) {
+            return StatusPayment.PAYED;
+        } else if (order.getPaymentStatus().equals(StatusPayment.OPEN) && order.getExpireDate().isEqual(LocalDate.now()) || order.getExpireDate().isAfter(LocalDate.now())) {
+            order.setPaymentStatus(StatusPayment.PAY_WARN);
+            updateOrder(order);
+            return StatusPayment.PAY_WARN;
+        } else if(order.getPaymentStatus().equals(StatusPayment.OPEN)) {
+            return StatusPayment.OPEN;
+        } else {
+            return StatusPayment.PAY_WARN;
+        }
+    }
 
 }
