@@ -17,12 +17,31 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * This Class is a component, validate the JWT token and updates the security context holder.
+ *
+ * @author Florian Reining
+ * @version 1.0
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
+    /** Dependency  to @{@link com.oop2.backend.user.service.JwtService} */
     private final JwtService jwtService;
+    /** Dependency  to @{@link UserDetailsService} */
     private final UserDetailsService userDetailsService;
 
+    /**
+     * The methode filters the JWT token. First the request head is checked if there is a JWT Token.
+     * Then all details will extract to check if the JWT token is for the user.
+     * After that the methode calls the validateService methode of @{@link JwtService} and validate the rest of the Token.
+     *
+     * @param request takes the request send from the frontend
+     * @param response takes the respons of the request
+     * @param chain takes a FilterChain.
+     * @throws ServletException Defines a general exception a servlet can throw when it encounters difficulty.
+     * @throws IOException Defines a general input output exception.
+     */
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,

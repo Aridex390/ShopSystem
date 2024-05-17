@@ -1,5 +1,6 @@
 package com.oop2.backend.order.model;
 
+
 import com.oop2.backend.order.model.enums.Status;
 import com.oop2.backend.order.model.enums.StatusPayment;
 import com.oop2.backend.user.model.User;
@@ -50,3 +51,4 @@ public class Order {
     @OneToMany(mappedBy = "order", orphanRemoval = true)
     private List<Cart> cart;
 }
+

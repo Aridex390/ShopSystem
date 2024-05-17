@@ -5,7 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-// TODO: Documentation
+/**
+ * The interface hold the methods for special operation in a service and is extended by @{@link JpaRepository} for basic database operations.
+ *
+ * @author Florian Reining
+ * @version 1.0
+ */
 public interface UserRepo extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     boolean existsByEmail(String username);
