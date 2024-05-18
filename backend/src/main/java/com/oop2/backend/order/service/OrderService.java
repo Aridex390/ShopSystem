@@ -79,10 +79,10 @@ public class OrderService {
      * @param user takes a @{@link User}
      * @return the order for a user or null if no order exist with the id
      */
-    public Order findeOrderByIdForUser(int id, User user) {
+    public Order findOrderByIdForUser(Long id, User user) {
         List<Order> orders = findeAllOrderForUser(user);
         for (Order order : orders) {
-            if (order.getId() == id) {
+            if (order.getId().equals(id)) {
                 return order;
             }
         }
