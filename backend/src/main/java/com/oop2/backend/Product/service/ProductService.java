@@ -60,8 +60,9 @@ public class ProductService {
      *
      * @param product takes the edit @{@link Product}
      */
-    public void updateProduct(Product product) {
+    public Optional<Product> updateProduct(Product product) {
         productRepo.UpdateProduct(product);
+        return getProductById(product.getId());
     }
 
     /**
