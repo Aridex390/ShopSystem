@@ -1,5 +1,6 @@
 package com.oop2.backend.Product.service;
 
+import com.oop2.backend.Product.exeption.ProductNotFoundExeption;
 import com.oop2.backend.Product.model.Product;
 import com.oop2.backend.Product.repo.ProductRepo;
 import com.oop2.backend.user.model.User;
@@ -15,7 +16,7 @@ import java.util.Optional;
  * This service class handles all the action for @{@link Product}
  *
  * @author Florian Reining
- * @version 1.0
+ * @version 1.1
  */
 @Service
 public class ProductService {
@@ -42,8 +43,8 @@ public class ProductService {
      * @param id the id of a product of @{@link Long}
      * @return a @{@link Product}
      */
-    public Optional<Product> getProductById(Long id) {
-        return productRepo.findById(id);
+    public Product getProductById(Long id) {
+        return productRepo.findById(id).orElseThrow(() -> new ProductNotFoundExeption("Product with id " + id + " was not found"));
     }
 
     /**
@@ -60,9 +61,8 @@ public class ProductService {
      *
      * @param product takes the edit @{@link Product}
      */
-    public Optional<Product> updateProduct(Product product) {
-        productRepo.UpdateProduct(product);
-        return getProductById(product.getId());
+    public Product updateProduct(Product product) {
+        return productRepo.UpdateProduct(product).orElseThrow(() -> new ProductNotFoundExeption("Product with id " + product.getId() + " was not found"));
     }
 
     /**

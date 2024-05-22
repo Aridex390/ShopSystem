@@ -3,10 +3,9 @@ package com.oop2.backend.Product.controller;
 import com.oop2.backend.Product.model.Product;
 import com.oop2.backend.Product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +15,10 @@ import java.util.Optional;
  * </p>
  * The controller is only for get purpose.
  * @author Florian Reining
- * @version 1.0
+ * @version 1.1
  */
-@RestController("product")
+@RestController
+@RequestMapping("/product")
 public class ProductRestController {
     private final ProductService productService;
 
@@ -27,13 +27,17 @@ public class ProductRestController {
         this.productService = productService;
     }
 
-    @RequestMapping(value = "products", method = RequestMethod.GET, produces = "application/json")
-    public List<Product> getProducts() {
-        return productService.getAllProducts();
+    @GetMapping
+    public ResponseEntity<List<Product>> getProducts() {
+        List<Product> products = productService.getAllProducts();
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/product-{id}", method = RequestMethod.GET, produces = "application/json")
-    public Optional<Product> getProduct(@PathVariable Long id) {
-        return productService.getProductById(id);
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Product> getProduct(@PathVariable Long id) {
+        Product product = productService.getProductById(id);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
+
+
 }

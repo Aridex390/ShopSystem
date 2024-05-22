@@ -5,6 +5,8 @@ import com.oop2.backend.order.service.OrderService;
 import com.oop2.backend.user.model.User;
 import com.oop2.backend.user.model.UserCart;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,9 +15,10 @@ import java.util.List;
  * The rest controller class for order, with the endpoints to change data between the frontend and the backend.
  *
  * @author Florian Reining
- * @version 1.0
+ * @version 1.1
  */
-@RestController("order")
+@RestController
+@RequestMapping("/order")
 public class OrderRestController {
 
     private final OrderService orderService;
@@ -25,24 +28,28 @@ public class OrderRestController {
         this.orderService = orderService;
     }
 
-    @RequestMapping(value = "/orders", method = RequestMethod.GET, produces = "application/json")
-    public List<Order> getOrders(User user) {
-        return orderService.findeAllOrderForUser(user);
+    @GetMapping
+    public ResponseEntity<List<Order>> getOrders(User user) {
+        List<Order> orders = orderService.findeAllOrderForUser(user);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
-    public Order getOrder(@PathVariable Long id, User user) {
-        return orderService.findOrderByIdForUser(id, user);
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Order> getOrder(@PathVariable Long id, User user) {
+        Order order = orderService.findOrderByIdForUser(id, user);
+        return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "application/json")
-    public void addOrder(@RequestBody Order order, List<UserCart> userCart) {
-        orderService.addOrder(order, userCart);
+    @PostMapping(value = "/add")
+    public ResponseEntity<Order> addOrder(@RequestBody Order order, List<UserCart> userCart) {
+        Order newOrder = orderService.addOrder(order, userCart);
+        return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = "application/json")
-    public void updateOrder(@RequestBody Order order) {
-        orderService.updateOrder(order);
+    public ResponseEntity<Order> updateOrder(@RequestBody Order order) {
+        Order updatedOrder = orderService.updateOrder(order);
+        return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
     }
 
 
