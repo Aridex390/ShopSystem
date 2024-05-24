@@ -1,5 +1,6 @@
 package com.oop2.backend.order.service;
 
+import com.oop2.backend.order.exeption.OrderNotFoundExeption;
 import com.oop2.backend.order.model.Cart;
 import com.oop2.backend.order.model.Order;
 import com.oop2.backend.order.model.enums.StatusPayment;
@@ -22,7 +23,7 @@ import java.util.List;
  * except the status.
  *
  * @author Florian Reining
- * @version 1.1
+ * @version 1.2
  */
 @Service
 public class OrderService {
@@ -96,8 +97,8 @@ public class OrderService {
      *
      * @param order takes an @{@link Order}
      */
-    public void updateOrder(Order order) {
-        orderRepo.updateOrder(order);
+    public Order updateOrder(Order order) {
+        return orderRepo.save(order);
     }
 
     /**
