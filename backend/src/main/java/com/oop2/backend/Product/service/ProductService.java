@@ -1,21 +1,20 @@
 package com.oop2.backend.Product.service;
 
+import com.oop2.backend.Product.exeption.ProductNotFoundException;
+import com.oop2.backend.Product.model.Enums.Category;
 import com.oop2.backend.Product.model.Product;
 import com.oop2.backend.Product.repo.ProductRepo;
-import com.oop2.backend.user.model.User;
-import com.oop2.backend.user.model.UserCart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This service class handles all the action for @{@link Product}
  *
  * @author Florian Reining
- * @version 1.0
+ * @version 1.1
  */
 @Service
 public class ProductService {
@@ -42,14 +41,14 @@ public class ProductService {
      * @param id the id of a product of @{@link Long}
      * @return a @{@link Product}
      */
-    public Optional<Product> getProductById(Long id) {
-        return productRepo.findById(id);
+    public Product getProductById(Long id) {
+        return productRepo.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " was not found"));
     }
 
     /**
      *
      * @param product take all available information's of a @{@link Product}
-     * @return
+     * @return the added product
      */
     public Product addProduct(Product product) {
         return productRepo.save(product);
@@ -60,9 +59,8 @@ public class ProductService {
      *
      * @param product takes the edit @{@link Product}
      */
-    public Optional<Product> updateProduct(Product product) {
-        productRepo.UpdateProduct(product);
-        return getProductById(product.getId());
+    public Product updateProduct(Product product) {
+        return productRepo.save(product);
     }
 
     /**
@@ -72,5 +70,14 @@ public class ProductService {
      */
     public void deleteProduct(Long id) {
         productRepo.deleteById(id);
+    }
+
+    /** The methode get all products for a category or throws a @{@link ProductNotFoundException}.
+     *
+     * @param category @{@link Category}
+     * @return a @{@link List} of products
+     */
+    public List<Product> getProductsByCategory(Category category) {
+        return new ArrayList<>(productRepo.findProductsByCategory(category).orElseThrow(() -> new ProductNotFoundException("Products with " + category + " was not found or " + category + " don't exist")));
     }
 }

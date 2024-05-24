@@ -36,6 +36,7 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+
     /**
      * The generic methode extract saved @{@link Claims} / information in a JWT Token.
      * In this case it can be the username / email or the expiration date
@@ -70,6 +71,8 @@ public class JwtService {
         return generateToken(new HashMap<>(), userDetails);
     }
 
+
+
     /**
      * The methode generate a new JWT toke for the user.
      * The Token is manipulated with the username and the claims as List.
@@ -101,6 +104,8 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+    // TODO: methods to add and extracted the role from / to a Token
 
     /**
      * The Methode returns the Key decoded as BASE64.

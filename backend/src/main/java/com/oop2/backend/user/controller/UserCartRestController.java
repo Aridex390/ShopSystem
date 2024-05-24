@@ -2,40 +2,52 @@ package com.oop2.backend.user.controller;
 
 import com.oop2.backend.user.model.User;
 import com.oop2.backend.user.model.UserCart;
-import com.oop2.backend.user.service.UserService;
+import com.oop2.backend.user.service.UserCartService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("cart")
+/**
+ * The rest controller class for the cart of a user, with the endpoints to exchange data between the frontend and the backend.
+ * </p>
+ * The controller is only for get purpose.
+ * @author Florian Reining
+ * @version 1.0
+ */
+@RestController
+@RequestMapping("/user/cart")
 public class UserCartRestController {
-    private final UserService userService;
+    private final UserCartService userCartService;
 
     @Autowired
-    public UserCartRestController(UserService userService) {
-        this.userService = userService;
+    public UserCartRestController(UserCartService userCartService) {
+        this.userCartService = userCartService;
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET, produces = "application/json")
-    public List<UserCart> getUserCart(User user) {
-        return userService.getUserCart(user);
+    @GetMapping
+    public ResponseEntity<List<UserCart>> getUserCart(User user) {
+        List<UserCart> cart = userCartService.getUserCart(user);
+        return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/increase", method = RequestMethod.PUT, consumes = "application/json")
-    public void increaseUserCart(UserCart userCart) {
-        userService.increaseQuantity(userCart);
+    @PutMapping(value = "/increase")
+    public ResponseEntity<UserCart> increaseUserCart(UserCart userCart) {
+        UserCart cartItem = userCartService.increaseQuantity(userCart);
+        return new ResponseEntity<>(cartItem, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/decrease", method = RequestMethod.PUT, consumes = "application/json")
-    public void decreaseUserCart(UserCart userCart) {
-        userService.decreaseQuantity(userCart);
+    @PutMapping(value = "/decrease")
+    public ResponseEntity<UserCart> decreaseUserCart(UserCart userCart) {
+        UserCart cartItem = userCartService.decreaseQuantity(userCart);
+        return new ResponseEntity<>(cartItem, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "application/json")
-    public void addUserCart(UserCart userCart, User user) {
-        userService.addUserCart(user, userCart);
+    @PutMapping(value = "/add")
+    public ResponseEntity<List<UserCart>> addUserCart(UserCart userCart, User user) {
+        List<UserCart> newCartItem = userCartService.addUserCart(user, userCart);
+        return new ResponseEntity<>(newCartItem, HttpStatus.OK);
     }
 }

@@ -18,14 +18,14 @@ import java.util.List;
  * @version 1.1
  */
 @Service
-public class UserService {
+public class UserCartService {
     /** Dependency to @{@link com.oop2.backend.user.repo.UserRepo} */
     private final UserRepo userRepo;
     /** Dependency to @{@link com.oop2.backend.user.repo.UserCartRepo} */
     private final UserCartRepo userCartRepo;
 
     @Autowired
-    public UserService(UserRepo userRepo, UserCartRepo userCartRepo) {
+    public UserCartService(UserRepo userRepo, UserCartRepo userCartRepo) {
         this.userRepo = userRepo;
         this.userCartRepo = userCartRepo;
     }
@@ -71,7 +71,6 @@ public class UserService {
         }
         return userCarts;
     }
-
     /**
      * This method creates a new @{@link User}. But before the Email will check, to avoid
      * duplicate Emails.
@@ -80,12 +79,14 @@ public class UserService {
      * @return the new added user for an auto login after the sign-up process.
      * Or null if the Email of the User is taken.
      */
+/*
     public User addUser(User user) {
         if (!userRepo.existsByEmail(user.getEmail())) {
             return userRepo.save(user);
         }
         return null;
     }
+    */
 
     /**
      * This method increase the quantity by 1.
@@ -145,10 +146,12 @@ public class UserService {
      *
      * @param user takes a complete @{@link User}.
      */
+    /*
     public void deleteUser(User user) {
         userCartRepo.deleteAllByUser(user);
         userRepo.delete(user);
     }
+     */
 
     /**
      * The methode check the role of User.
