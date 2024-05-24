@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,17 +27,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "oder")
-public class Order {
+@Table(name = "_order")
+public class Order implements Serializable {
     /** The unique identifier of an order */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
     /** The date of order */
+    @Builder.Default
     private LocalDateTime orderDate = LocalDateTime.now();
     /** The expiry date for the payment */
-    private LocalDate expireDate = orderDate.toLocalDate().plusDays(30);
+    private LocalDate expireDate; // = this.getOrderDate().toLocalDate().plusDays(30);
     /** The status of the order @{@link Status} */
     @Enumerated(EnumType.STRING)
     private Status status;

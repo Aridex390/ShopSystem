@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The rest controller class for Product, with the endpoints to change data between the frontend and the backend.
+ * The rest controller class for Product, with the endpoints to exchange data between the frontend and the backend.
  * </p>
  * The controller is only for get purpose.
  * @author Florian Reining
  * @version 1.1
  */
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/user/product")
 public class ProductRestController {
     private final ProductService productService;
 

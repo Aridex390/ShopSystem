@@ -102,6 +102,8 @@ public class JwtService {
                 .getBody();
     }
 
+    // TODO: methods to add and extracted the role from / to a Token
+
     /**
      * The Methode returns the Key decoded as BASE64.
      *

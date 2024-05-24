@@ -1,5 +1,6 @@
 package com.oop2.backend.Product.model;
 
+import com.oop2.backend.Product.model.Enums.Category;
 import com.oop2.backend.Product.model.Enums.Currency;
 import com.oop2.backend.order.model.Cart;
 import jakarta.persistence.*;
@@ -17,7 +18,7 @@ import java.util.Objects;
  * This class ist the hold the Information's about a product
  *
  * @author Florian Reining
- * @version 1.0
+ * @version 1.1
  */
 @Data
 @Builder
@@ -36,12 +37,17 @@ public class Product {
     /** Description for the product @{@link String} */
     private String description;
     /** Weight for the product (grams) @{@link Double} */
+    @Builder.Default
     private double weight = 100;
     /** Price for the product (0.00 €/$) @{@link Double}*/
     private double price;
     /** Currency for the product @{@link Currency}*/
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private Currency currency = Currency.DOLLAR;
+    /** Category for the product @{@link com.oop2.backend.Product.model.Enums.Category} */
+    @Enumerated(EnumType.STRING)
+    private Category category;
     /** Association to @{@link com.oop2.backend.order.model.Cart} */
     @OneToOne(mappedBy = "product")
     private Cart cart;

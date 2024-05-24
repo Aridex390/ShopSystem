@@ -5,5 +5,6 @@ public enum Status {
     IN_PROGRESS,
     SEND,
     ARRIVED,
-    SEND_BACK
+    SEND_BACK_USER,
+    SEND_BACK_ADMIN
 }

@@ -98,7 +98,7 @@ public class OrderService {
      * @param order takes an @{@link Order}
      */
     public Order updateOrder(Order order) {
-        return orderRepo.updateOrder(order).orElseThrow(() -> new OrderNotFoundExeption("Order with ID " + order.getId() + " was not found"));
+        return orderRepo.save(order);
     }
 
     /**

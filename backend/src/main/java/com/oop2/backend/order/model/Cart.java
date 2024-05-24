@@ -4,6 +4,8 @@ import com.oop2.backend.Product.model.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 
 /**
  * This model class holds the information about
@@ -18,10 +20,9 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table(name = "order_cart")
-public class Cart {
+public class Cart implements Serializable {
     /** the unique identifier */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

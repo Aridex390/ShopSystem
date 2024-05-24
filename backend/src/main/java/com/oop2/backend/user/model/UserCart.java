@@ -28,6 +28,7 @@ public class UserCart {
     @Column(name = "id", nullable = false)
     private Long id;
     /** the quantity of a  product. */
+    @Builder.Default
     private int quantity = 1;
     /** Association to @{@link com.oop2.backend.user.model.User} */
     @ManyToOne
@@ -37,8 +38,4 @@ public class UserCart {
     @OneToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
-
-
-
-
 }

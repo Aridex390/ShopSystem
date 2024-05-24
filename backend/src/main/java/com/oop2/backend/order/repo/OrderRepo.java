@@ -2,6 +2,8 @@ package com.oop2.backend.order.repo;
 
 import com.oop2.backend.order.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.Optional;
 
@@ -11,6 +13,6 @@ import java.util.Optional;
  * @author Florian Reining
  * @version 1.1
  */
+@EnableJpaRepositories
 public interface OrderRepo extends JpaRepository<Order, Long> {
-    Optional<Order> updateOrder(Order order);
 }

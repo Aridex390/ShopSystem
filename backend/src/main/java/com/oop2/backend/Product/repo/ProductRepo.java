@@ -1,8 +1,10 @@
 package com.oop2.backend.Product.repo;
 
+import com.oop2.backend.Product.model.Enums.Category;
 import com.oop2.backend.Product.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -12,6 +14,5 @@ import java.util.Optional;
  * @version 1.1
  */
 public interface ProductRepo extends JpaRepository<Product, Long> {
-
-    Optional<Product> UpdateProduct(Product product);
+    Optional<List<Product>> findProductsByCategory(Category category);
 }

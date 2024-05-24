@@ -50,9 +50,11 @@ public class User implements UserDetails {
     private Role role;
     /** Association to the user cart @{@link com.oop2.backend.user.model.UserCart} */
     @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @Builder.Default
     private List<UserCart> userCarts = new ArrayList<>();
     /** Association to the @{@link Order} as @{@link List} */
     @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @Builder.Default
     private List<Order> orders = new ArrayList<>();
 
     @Override
