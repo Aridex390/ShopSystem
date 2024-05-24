@@ -36,6 +36,7 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+
     /**
      * The generic methode extract saved @{@link Claims} / information in a JWT Token.
      * In this case it can be the username / email or the expiration date
@@ -69,6 +70,8 @@ public class JwtService {
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
+
+
 
     /**
      * The methode generate a new JWT toke for the user.

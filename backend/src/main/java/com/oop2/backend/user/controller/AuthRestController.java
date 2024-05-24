@@ -9,6 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * This rest controller handel's the authentication for a @{@link com.oop2.backend.user.model.User}
+ * and generates a new jwt token.
+ *
+ * @author Florian Reining
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthRestController {
