@@ -25,30 +25,28 @@ public class OrderRestController {
 
     private final OrderService orderService;
 
-    @GetMapping
-    public ResponseEntity<List<Order>> getOrders(User user) {
-        List<Order> orders = orderService.findeAllOrderForUser(user);
+    @GetMapping(value = "/{email}")
+    public ResponseEntity<List<Order>> getOrders(@PathVariable String email) {
+        List<Order> orders = orderService.findeAllOrderForUser(email);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Order> getOrder(@PathVariable Long id, User user) {
-        Order order = orderService.findOrderByIdForUser(id, user);
+    @GetMapping(value = "/{id}?user={email}")
+    public ResponseEntity<Order> getOrder(@PathVariable Long id, @PathVariable String email) {
+        Order order = orderService.findOrderByIdForUser(id, email);
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<Order> addOrder(@RequestBody Order order, List<UserCart> userCart) {
-        Order newOrder = orderService.addOrder(order, userCart);
+    public ResponseEntity<Order> addOrder(@RequestBody List<UserCart> userCart) {
+        Order newOrder = orderService.addOrder(userCart);
         return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = "application/json")
+    @PutMapping(value = "/update")
     public ResponseEntity<Order> updateOrder(@RequestBody Order order) {
         Order updatedOrder = orderService.updateOrder(order);
         return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
     }
-
-
 
 }

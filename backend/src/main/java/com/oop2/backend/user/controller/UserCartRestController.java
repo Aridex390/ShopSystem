@@ -6,6 +6,7 @@ import com.oop2.backend.user.service.UserCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,27 +28,33 @@ public class UserCartRestController {
         this.userCartService = userCartService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserCart>> getUserCart(User user) {
-        List<UserCart> cart = userCartService.getUserCart(user);
+    @GetMapping(value = "/{email}")
+    public ResponseEntity<List<UserCart>> getUserCart(@PathVariable String email) {
+        List<UserCart> cart = userCartService.getUserCart(email);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/increase")
-    public ResponseEntity<UserCart> increaseUserCart(UserCart userCart) {
-        UserCart cartItem = userCartService.increaseQuantity(userCart);
+    @PutMapping(value = "/increase/{id}")
+    public ResponseEntity<UserCart> increaseUserCart(@PathVariable Long id) {
+        UserCart cartItem = userCartService.increaseQuantity(id);
+        return new ResponseEntity<>(cartItem, HttpStatus.OK);
+    }
+// TODO: change parameter to {Long id}
+    @PutMapping(value = "/decrease/{id}")
+    public ResponseEntity<UserCart> decreaseUserCart(@PathVariable Long id) {
+        UserCart cartItem = userCartService.decreaseQuantity(id);
         return new ResponseEntity<>(cartItem, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/decrease")
-    public ResponseEntity<UserCart> decreaseUserCart(UserCart userCart) {
-        UserCart cartItem = userCartService.decreaseQuantity(userCart);
-        return new ResponseEntity<>(cartItem, HttpStatus.OK);
-    }
-
-    @PutMapping(value = "/add")
-    public ResponseEntity<List<UserCart>> addUserCart(UserCart userCart, User user) {
-        List<UserCart> newCartItem = userCartService.addUserCart(user, userCart);
+    @PostMapping(value = "/add?user={email}")
+    public ResponseEntity<List<UserCart>> addUserCart(UserCart userCart, @PathVariable String email) {
+        List<UserCart> newCartItem = userCartService.addUserCart(email, userCart);
         return new ResponseEntity<>(newCartItem, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity<List<UserCart>> deleteUserCart(@PathVariable Long id) {
+        List<UserCart> userCart = userCartService.removeFromUserCart(id);
+        return new ResponseEntity<>(userCart, HttpStatus.OK);
     }
 }

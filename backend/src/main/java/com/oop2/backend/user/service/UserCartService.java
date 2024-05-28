@@ -1,11 +1,13 @@
 package com.oop2.backend.user.service;
 
+import com.oop2.backend.user.exception.UserCartNotfoundException;
 import com.oop2.backend.user.model.Enum.Role;
 import com.oop2.backend.user.model.User;
 import com.oop2.backend.user.model.UserCart;
 import com.oop2.backend.user.repo.UserCartRepo;
 import com.oop2.backend.user.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,11 +35,12 @@ public class UserCartService {
     /**
      * The method select every product from the user cart.
      *
-     * @param user takes a complete @{@link User}.
+     * @param email takes @{@link String}
      * @return a list of the products saved in a cart.
      */
-    public List<UserCart> getUserCart(User user) {
+    public List<UserCart> getUserCart(String email) {
         List<UserCart> userCarts = new ArrayList<>();
+        User user = userRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User with the email " + email + " was not found."));
         for (UserCart userCart : userCartRepo.findAll()) {
             if (userCart.getUser().equals(user)) {
                 userCarts.add(userCart);
@@ -52,16 +55,16 @@ public class UserCartService {
      * </p> If the product is currently added, the quantity of the product
      * will be increased by 1 with @{@systemProperty increaseQuantity}.
      *
-     * @param user takes a complete @{@link User}.
+     * @param email takes a @{@link String}.
      * @param userCart takes a complete @{@link UserCart}.
      * @return the new cart List for the user
      */
-    public List<UserCart> addUserCart(User user, UserCart userCart) {
-        List<UserCart> userCarts = getUserCart(user);
+    public List<UserCart> addUserCart(String email, UserCart userCart) {
+        List<UserCart> userCarts = getUserCart(email);
         UserCart userCart1;
         for (UserCart userCart2 : userCarts) {
             if(userCart2.equals(userCart)) {
-                userCart1 = increaseQuantity(userCart);
+                userCart1 = increaseQuantity(userCart.getId());
                 userCarts.remove(userCart);
                 userCarts.add(userCart1);
             } else {
@@ -71,30 +74,15 @@ public class UserCartService {
         }
         return userCarts;
     }
-    /**
-     * This method creates a new @{@link User}. But before the Email will check, to avoid
-     * duplicate Emails.
-     *
-     * @param user takes all currently saved Information's about the @{@link User}.
-     * @return the new added user for an auto login after the sign-up process.
-     * Or null if the Email of the User is taken.
-     */
-/*
-    public User addUser(User user) {
-        if (!userRepo.existsByEmail(user.getEmail())) {
-            return userRepo.save(user);
-        }
-        return null;
-    }
-    */
 
     /**
      * This method increase the quantity by 1.
      *
-     * @param userCart Takes the complete @{@link UserCart}
+     * @param id Takes the complete @{@link Long}
      * @return the product as @{@link UserCart} with the increased quantity.
      */
-    public UserCart increaseQuantity(UserCart userCart) {
+    public UserCart increaseQuantity(Long id) {
+        UserCart userCart = userCartRepo.findById(id).orElseThrow(() -> new UserCartNotfoundException("Cart item with id " + id + " was not found."));
         int quantity = userCart.getQuantity();
         quantity++;
         userCart.setQuantity(quantity);
@@ -104,14 +92,15 @@ public class UserCartService {
     /**
      * This methode decrease the quantity by 1.
      *
-     * @param userCart Takes the complete @{@link UserCart}
+     * @param id Takes w @{@link Long}
      * @return the product as @{@link UserCart} with the decreased quantity.
      */
-    public UserCart decreaseQuantity(UserCart userCart) {
+    public UserCart decreaseQuantity(Long id) {
+        UserCart userCart = userCartRepo.findById(id).orElseThrow(() -> new UserCartNotfoundException("Cart item with id " + id + " was not found."));
         int quantity = userCart.getQuantity();
         quantity--;
         if (quantity <= 0) {
-            deleteUserCart(userCart);
+            removeFromUserCart(userCart.getId());
             return null;
         } else {
             userCart.setQuantity(quantity);
@@ -121,14 +110,15 @@ public class UserCartService {
 
     /**
      *
-     * @param userCart Takes the complete @{@link UserCart}
+     * @param id Takes the complete @{@link Long}
      * @return the new list of products in a cart.
      */
-    public List<UserCart> deleteUserCart(UserCart userCart) {
-        userCartRepo.delete(userCart);
+    public List<UserCart> removeFromUserCart(Long id) {
+        userCartRepo.deleteById(id);
+        UserCart userCart =  userCartRepo.findById(id).orElseThrow(() -> new UserCartNotfoundException("Cart item with id " + id + " was not found."));
         User user = userCart.getUser();
 
-        return getUserCart(getUserById(user.getId()));
+        return getUserCart(user.getEmail());
     }
 
     /**
@@ -140,18 +130,6 @@ public class UserCartService {
     private User getUserById(Long id) {
         return userRepo.findById(id).orElse(null);
     }
-
-    /**
-     * The methode delete a user and his cart.
-     *
-     * @param user takes a complete @{@link User}.
-     */
-    /*
-    public void deleteUser(User user) {
-        userCartRepo.deleteAllByUser(user);
-        userRepo.delete(user);
-    }
-     */
 
     /**
      * The methode check the role of User.

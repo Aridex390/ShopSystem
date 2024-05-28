@@ -1,6 +1,8 @@
 package com.oop2.backend.Product.controller;
 
 import com.oop2.backend.Product.model.Product;
+import com.oop2.backend.Product.model.search.PagedResponse;
+import com.oop2.backend.Product.model.search.SearchRequest;
 import com.oop2.backend.Product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * The rest controller class for Product, with the endpoints to exchange data between the frontend and the backend.
@@ -28,8 +29,8 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getProducts() {
-        List<Product> products = productService.getAllProducts();
+    public ResponseEntity<PagedResponse> getProducts(SearchRequest request) {
+        PagedResponse products = productService.getPagedProducts(request);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
@@ -38,6 +39,4 @@ public class ProductRestController {
         Product product = productService.getProductById(id);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
-
-
 }

@@ -40,8 +40,8 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry.requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                                .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-                                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/admin/**").permitAll()  //hasAnyRole("ADMIN")
+                                .requestMatchers("/user/**").permitAll()  //hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/auth/**").permitAll()
                                 .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())

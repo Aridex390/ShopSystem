@@ -58,6 +58,12 @@
             <div class="col-lg-3">
                 <div class="shop__sidebar">
                     <div class="shop__sidebar__search">
+                        <mat-paginator [length]="totalCount"
+                                       [pageIndex]="page"
+                                       [pageSize]="size"
+                                       [pageSizeOptions]="[12, 24, 48, 96]"
+                                       page="loadProducts($event)">
+                        </mat-paginator>
                         <form action="#">
                             <input type="text" placeholder="Search...">
                             <button type="submit"><span class="icon_search"></span></button>
@@ -667,11 +673,9 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="product__pagination">
-                            <a class="active" href="#">1</a>
-                            <a href="#">2</a>
-                            <a href="#">3</a>
-                            <span>...</span>
-                            <a href="#">21</a>
+                            <a routerLink="/shop/1">&lt;</a>
+                            <a class="active" routerLink="/shop/2">2</a>
+                            <a routerLink="/shop/3">&gt;</a> 
                         </div>
                     </div>
                 </div>
