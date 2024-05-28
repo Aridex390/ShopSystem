@@ -72,6 +72,8 @@ public class ProductService {
         productRepo.deleteById(id);
     }
 
+    // TODO: Pagination
+
     /** The methode get all products for a category or throws a @{@link ProductNotFoundException}.
      *
      * @param category @{@link Category}
