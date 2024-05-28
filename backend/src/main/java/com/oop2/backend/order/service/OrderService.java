@@ -3,16 +3,20 @@ package com.oop2.backend.order.service;
 import com.oop2.backend.order.exeption.OrderNotFoundExeption;
 import com.oop2.backend.order.model.Cart;
 import com.oop2.backend.order.model.Order;
+import com.oop2.backend.order.model.enums.Status;
 import com.oop2.backend.order.model.enums.StatusPayment;
 import com.oop2.backend.order.repo.CartRepo;
 import com.oop2.backend.order.repo.OrderRepo;
 import com.oop2.backend.user.model.User;
 import com.oop2.backend.user.model.UserCart;
 import com.oop2.backend.user.repo.UserCartRepo;
+import com.oop2.backend.user.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,41 +35,58 @@ public class OrderService {
     private final OrderRepo orderRepo;
     /** Dependency to @{@link CartRepo} */
     private final CartRepo cartRepo;
-    /** Dependency to @{@link UserCartRepo} */
-    private final UserCartRepo userCartRepo;
+    /** Dependency to @{@link UserRepo} */
+    private final UserRepo userRepo;
 
     @Autowired
-    public OrderService(OrderRepo orderRepo, CartRepo cartRepo, UserCartRepo userCartRepo) {
+    public OrderService(OrderRepo orderRepo, CartRepo cartRepo, UserRepo userRepo) {
         this.orderRepo = orderRepo;
         this.cartRepo = cartRepo;
-        this.userCartRepo = userCartRepo;
+        this.userRepo = userRepo;
     }
 
     /**
      * The methode create a new order
      *
-     * @param order takes currently available informations about a order
-     * @param carts takes the user cart to save it to an order
+     * @param carts takes the @{@link UserCart} to save it to an @{@link Order}
      * @return the saved order
      */
-    public Order addOrder(Order order, List<UserCart> carts) {
-        for (UserCart cart : carts) {
-            Cart cart1 = new Cart(cart.getQuantity(), order, cart.getProduct());
-            cartRepo.save(cart1);
-            userCartRepo.delete(cart);
-        }
-        return orderRepo.save(order);
+    public Order addOrder(List<UserCart> carts) {
+        UserCart userCart = carts.get(0);
+        Order order = Order.builder()
+                .orderDate(LocalDateTime.now())
+                .expireDate(LocalDate.now().plusDays(30))
+                .status(Status.OPEN)
+                .paymentStatus(StatusPayment.OPEN)
+                .user(userRepo.findByEmail(
+                        userCart.getUser().getEmail())
+                        .orElseThrow(() -> new UsernameNotFoundException("User with the email " + userCart.getUser().getEmail() + " was not found")))
+                .build();
 
+        order = orderRepo.save(order);
+
+        for (UserCart cart : carts) {
+            Cart cart1 = Cart.builder()
+                    .order(order)
+                    .product(cart.getProduct())
+                    .quantity(cart.getQuantity())
+                    .build();
+
+            cartRepo.save(cart1);
+        }
+
+        return order;
     }
 
     /**
      * The methode looks for all orders that associated to a user.
      *
-     * @param user takes a @{@link User}
+     * @param email takes a @{@link String}
      * @return all orders for a user as a list
      */
-    public List<Order> findeAllOrderForUser(User user) {
+    public List<Order> findeAllOrderForUser(String email) {
         List<Order> orders = new ArrayList<>();
+        User user = userRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User with the email " + email + " was not found."));
         for (Order order : orderRepo.findAll()) {
             if (order.getUser().equals(user)) {
                 orders.add(order);
@@ -77,11 +98,11 @@ public class OrderService {
     /**
      *
      * @param id takes the id of an order
-     * @param user takes a @{@link User}
+     * @param email takes a @{@link String}
      * @return the order for a user or null if no order exist with the id
      */
-    public Order findOrderByIdForUser(Long id, User user) {
-        List<Order> orders = findeAllOrderForUser(user);
+    public Order findOrderByIdForUser(Long id, String email) {
+        List<Order> orders = findeAllOrderForUser(email);
         for (Order order : orders) {
             if (order.getId().equals(id)) {
                 return order;

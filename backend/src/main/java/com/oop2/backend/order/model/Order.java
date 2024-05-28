@@ -35,8 +35,7 @@ public class Order implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
     /** The date of order */
-    @Builder.Default
-    private LocalDateTime orderDate = LocalDateTime.now();
+    private LocalDateTime orderDate;
     /** The expiry date for the payment */
     private LocalDate expireDate; // = this.getOrderDate().toLocalDate().plusDays(30);
     /** The status of the order @{@link Status} */

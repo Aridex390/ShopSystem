@@ -3,11 +3,16 @@ package com.oop2.backend.Product.service;
 import com.oop2.backend.Product.exeption.ProductNotFoundException;
 import com.oop2.backend.Product.model.Enums.Category;
 import com.oop2.backend.Product.model.Product;
+import com.oop2.backend.Product.model.search.PagedResponse;
+import com.oop2.backend.Product.model.search.SearchRequest;
+import com.oop2.backend.Product.model.search.util.SearchRequestUtil;
 import com.oop2.backend.Product.repo.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,6 +25,7 @@ import java.util.List;
 public class ProductService {
     /** Dependency to @{@link ProductRepo} */
     private final ProductRepo productRepo;
+    private static final int PAGE_SIZE = 12;
 
     @Autowired
     public ProductService(ProductRepo productRepo) {
@@ -31,8 +37,18 @@ public class ProductService {
      *
      * @return a List of all Products as @{@link Product}
      */
-    public List<Product> getAllProducts() {
-        return new ArrayList<>(productRepo.findAll());
+    public PagedResponse getPagedProducts(SearchRequest request) {
+        Page<Product> response = productRepo.findAll(SearchRequestUtil.toPageRequest(request));
+        PagedResponse pagedResponse;
+        if(response.isEmpty()) {
+            pagedResponse = new PagedResponse(Collections.emptyList(), 0, response.getTotalElements());
+        } else {
+            List<Product> products = response.getContent();
+            pagedResponse = new PagedResponse(products, response.getSize(), response.getTotalElements());
+        }
+
+
+        return pagedResponse;
     }
 
     /**
@@ -71,6 +87,8 @@ public class ProductService {
     public void deleteProduct(Long id) {
         productRepo.deleteById(id);
     }
+
+    // TODO: Pagination
 
     /** The methode get all products for a category or throws a @{@link ProductNotFoundException}.
      *
