@@ -1,6 +1,8 @@
 package com.oop2.backend.Product.controller;
 
 import com.oop2.backend.Product.model.Product;
+import com.oop2.backend.Product.model.ProductRequest;
+import com.oop2.backend.Product.model.ProductResponse;
 import com.oop2.backend.Product.model.search.PagedResponse;
 import com.oop2.backend.Product.model.search.SearchRequest;
 import com.oop2.backend.Product.service.ProductService;
@@ -36,20 +38,20 @@ public class AdminProductRestController {
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
-        Product newProduct = productService.addProduct(product);
+    public ResponseEntity<ProductResponse> addProduct(@RequestBody ProductRequest request) {
+        ProductResponse newProduct = productService.addProduct(request);
         return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Product product = productService.getProductById(id);
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
+        ProductResponse product = productService.getProductById(id);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity<Product> updateProduct(@RequestBody Product product) {
-        Product updatedProduct = productService.updateProduct(product);
+    public ResponseEntity<ProductResponse> updateProduct(@RequestBody ProductResponse request) {
+        ProductResponse updatedProduct = productService.updateProduct(request);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 

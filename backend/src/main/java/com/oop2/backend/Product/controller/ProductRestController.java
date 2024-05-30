@@ -1,6 +1,7 @@
 package com.oop2.backend.Product.controller;
 
 import com.oop2.backend.Product.model.Product;
+import com.oop2.backend.Product.model.ProductResponse;
 import com.oop2.backend.Product.model.search.PagedResponse;
 import com.oop2.backend.Product.model.search.SearchRequest;
 import com.oop2.backend.Product.service.ProductService;
@@ -18,6 +19,7 @@ import java.util.List;
  * @author Florian Reining
  * @version 1.1
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/user/product")
 public class ProductRestController {
@@ -29,14 +31,14 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity<PagedResponse> getProducts(SearchRequest request) {
+    public ResponseEntity<PagedResponse> getProducts( SearchRequest request) {
         PagedResponse products = productService.getPagedProducts(request);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable Long id) {
-        Product product = productService.getProductById(id);
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) {
+        ProductResponse product = productService.getProductById(id);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 }
