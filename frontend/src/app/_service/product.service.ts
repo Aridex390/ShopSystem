@@ -30,9 +30,20 @@ export class ProductService {
     );
   };
 
-  findeProductById(id: string): Observable<Product> {
+  findProductById(id: string): Observable<Product> {
     return this.http.get<Product>(
       AUTH_API_URL + "/" + id,
+      httpOptions
+    );
+  };
+
+  findProductsByCategory(category: string, size: number): Observable<Product[]> {
+    const sufix: string = (category !== undefined && size != undefined)
+      ? "?category=" + category + "&size=" + size
+      : ""
+    
+    return this.http.get<Product[]>(
+      AUTH_API_URL + "products-by-category" + sufix,
       httpOptions
     );
   };

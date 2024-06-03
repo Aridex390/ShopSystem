@@ -3,6 +3,7 @@ package com.oop2.backend.Product.repo;
 import com.oop2.backend.Product.model.Enums.Category;
 import com.oop2.backend.Product.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;

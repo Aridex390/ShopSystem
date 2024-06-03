@@ -88,6 +88,7 @@ public class ProductService {
                 .price(request.getPrice())
                 .currency(request.getCurrency())
                 .category(request.getCategory())
+                .image(request.getImage())
                 .build();
 
         product = productRepo.save(product);
@@ -100,6 +101,7 @@ public class ProductService {
                 .price(product.getPrice())
                 .currency(product.getCurrency())
                 .category(product.getCategory())
+                .imageUrl(product.getImage())
                 .build();
     }
 
@@ -143,14 +145,29 @@ public class ProductService {
         productRepo.deleteById(id);
     }
 
-    // TODO: Pagination
-
     /** The methode get all products for a category or throws a @{@link ProductNotFoundException}.
      *
      * @param category @{@link Category}
      * @return a @{@link List} of products
      */
-    public List<Product> getProductsByCategory(Category category) {
-        return new ArrayList<>(productRepo.findProductsByCategory(category).orElseThrow(() -> new ProductNotFoundException("Products with " + category + " was not found or " + category + " don't exist")));
+    public List<ProductResponse> getProductsByCategory(Category category, int size) {
+        List<Product> products = new ArrayList<>(productRepo.findProductsByCategory(category).orElseThrow(() -> new ProductNotFoundException("Products with " + category + " was not found or " + category + " don't exist")));
+        List<ProductResponse> responses = new ArrayList<>();
+        products = products.subList(0, (size - 1));
+
+        for(Product product : products) {
+            responses.add(ProductResponse.builder()
+                    .id(product.getId())
+                    .name(product.getName())
+                    .description(product.getDescription())
+                    .weight(product.getWeight())
+                    .price(product.getPrice())
+                    .currency(product.getCurrency())
+                    .category(product.getCategory())
+                    .imageUrl(product.getImage())
+                    .build());
+        }
+
+        return responses;
     }
 }

@@ -3,35 +3,6 @@
     <div class="loader"></div>
 </div>
 
-<!-- Offcanvas Menu Begin -->
-<div class="offcanvas-menu-overlay"></div>
-<div class="offcanvas-menu-wrapper">
-    <div class="offcanvas__option">
-        <div class="offcanvas__links">
-            <a href="#">Sign in</a>
-            <a href="#">FAQs</a>
-        </div>
-        <div class="offcanvas__top__hover">
-            <span>Usd <i class="arrow_carrot-down"></i></span>
-            <ul>
-                <li>USD</li>
-                <li>EUR</li>
-                <li>USD</li>
-            </ul>
-        </div>
-    </div>
-    <div class="offcanvas__nav__option">
-        <a href="#" class="search-switch"><img src="/assets/img/icon/search.png" alt=""></a>
-        <a href="#"><img src="/assets/img/icon/heart.png" alt=""></a>
-        <a href="#"><img src="/assets/img/icon/cart.png" alt=""> <span>0</span></a>
-        <div class="price">$0.00</div>
-    </div>
-    <div id="mobile-menu-wrap"></div>
-    <div class="offcanvas__text">
-        <p>Free shipping, 30-day return or refund guarantee.</p>
-    </div>
-</div>
-<!-- Offcanvas Menu End -->
 <!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-option">
     <div class="container">
@@ -226,7 +197,7 @@
                                        [pageIndex]="page"
                                        [pageSize]="size"
                                        [pageSizeOptions]="[12, 24, 48, 96]"
-                                       page="loadProducts($event)">
+                                       (page)="loadProducts($event)">
                                 </mat-paginator>
                             </div>
                         </div>
@@ -257,7 +228,7 @@
                                 </ul>
                             </div>
                             <div class="product__item__text">
-                                <h6>{{product.name}}</h6>
+                                <h5>{{product.name}}</h5>
                                 <a href="#" class="add-cart">+ Add To Cart</a>
                                 <div class="rating">
                                     <i class="fa fa-star-o"></i>
@@ -266,7 +237,7 @@
                                     <i class="fa fa-star-o"></i>
                                     <i class="fa fa-star-o"></i>
                                 </div>
-                                <h5>{{product.price}} {{product.currency}}</h5>
+                                <h6>{{product.price}} {{product.currency}}</h6>
                                 <div class="product__color__select">
                                     <label for="pc-22">
                                         <input type="radio" id="pc-22">
@@ -285,9 +256,9 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="product__pagination">
-                            <a routerLink="/shop/1">&lt;</a>
-                            <a class="active" routerLink="/shop/2">2</a>
-                            <a routerLink="/shop/3">&gt;</a> 
+                            <a routerLink="/shop">&lt;</a>
+                            <a class="active" routerLink="/shop">2</a>
+                            <a routerLink="/shop">&gt;</a> 
                         </div>
                     </div>
                 </div>

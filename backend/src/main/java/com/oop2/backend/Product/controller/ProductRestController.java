@@ -1,7 +1,9 @@
 package com.oop2.backend.Product.controller;
 
+import com.oop2.backend.Product.model.Enums.Category;
 import com.oop2.backend.Product.model.Product;
 import com.oop2.backend.Product.model.ProductResponse;
+import com.oop2.backend.Product.model.search.DetailProductRequest;
 import com.oop2.backend.Product.model.search.PagedResponse;
 import com.oop2.backend.Product.model.search.SearchRequest;
 import com.oop2.backend.Product.service.ProductService;
@@ -40,5 +42,12 @@ public class ProductRestController {
     public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) {
         ProductResponse product = productService.getProductById(id);
         return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/products-by-category")
+    public ResponseEntity<List<ProductResponse>> getProductsByCategory(DetailProductRequest request) {
+        List<ProductResponse> responses = productService.getProductsByCategory(Category.valueOf(request.getCategory()), request.getSize());
+
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 }

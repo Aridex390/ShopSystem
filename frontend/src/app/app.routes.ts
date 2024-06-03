@@ -16,8 +16,8 @@ import { ProductDetailsComponent } from './product-details/product-details.compo
 export const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
     {path: 'home', component: HomeComponent},
-    {path: 'shop/:page', component: ShopComponent},
-    {path: 'shop/product-details/:id', component: ProductDetailsComponent},
+    {path: 'shop', component: ShopComponent},
+    {path: 'shop/product/:id', component: ProductDetailsComponent},
     {path: 'blog', component: BlogComponent},
     {path: 'checkout', component: CheckoutComponent},
     {path: 'contact', component: ContactComponent},

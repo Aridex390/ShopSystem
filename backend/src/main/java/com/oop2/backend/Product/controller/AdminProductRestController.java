@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,6 +42,17 @@ public class AdminProductRestController {
     public ResponseEntity<ProductResponse> addProduct(@RequestBody ProductRequest request) {
         ProductResponse newProduct = productService.addProduct(request);
         return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/add-more")
+    public ResponseEntity<List<ProductResponse>> addProductMore(@RequestBody ProductRequest[] request) {
+        List<ProductResponse> newProducts = new ArrayList<>();
+        for (ProductRequest productRequest : request) {
+            ProductResponse newProduct = productService.addProduct(productRequest);
+            newProducts.add(newProduct);
+        }
+
+        return new ResponseEntity<>(newProducts, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
