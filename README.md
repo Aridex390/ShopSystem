@@ -40,12 +40,11 @@ Anleitung zum ändern der endpunkt sicherung finden sie weiter unten.
 # Absicher der endpunkte.
 Bei diesem scenario werden 2 Zeilen im Code geändert.
 
-Hinweiß sollten sie mit dem Teilfertigen Frontend ausprobieren, Lassen sie die Security deaktiviert.
-
+Hinweis: sollten sie mit dem Teilfertigen Frontend ausprobieren, Lassen sie die Security deaktiviert.
 1. Suchen sie die Klasse: SecurityConfig
 
 2. in den Zeilen 43 und 44 wie unten zu sehen löschen sie das permitAll() raus und entkomentieren den code snippend dahinter wie unten zu sehen
-       ".requestMatchers("/admin/**").permitAll()  //hasAnyRole("ADMIN")"
-       ".requestMatchers("/user/**").permitAll()  //hasAnyRole("USER", "ADMIN")"
+       ".requestMatchers("/admin/**").hasAnyRole("ADMIN")"
+       ".requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")"
 
 viel Spaß mit dem Backend.
