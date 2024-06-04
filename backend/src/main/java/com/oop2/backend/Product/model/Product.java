@@ -48,6 +48,8 @@ public class Product {
     /** Category for the product @{@link com.oop2.backend.Product.model.Enums.Category} */
     @Enumerated(EnumType.STRING)
     private Category category;
+    /** Image url for the product */
+    private String image;
     /** Association to @{@link com.oop2.backend.order.model.Cart} */
     @OneToOne(mappedBy = "product")
     private Cart cart;

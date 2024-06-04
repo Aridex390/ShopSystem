@@ -11,11 +11,13 @@ import { ShopDetailsComponent } from './shop-details/shop-details.component';
 import { ShoppingcartComponent } from './shoppingcart/shoppingcart.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { HomeComponent } from './home/home.component';
+import { ProductDetailsComponent } from './product-details/product-details.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
     {path: 'home', component: HomeComponent},
     {path: 'shop', component: ShopComponent},
+    {path: 'shop/product/:id', component: ProductDetailsComponent},
     {path: 'blog', component: BlogComponent},
     {path: 'checkout', component: CheckoutComponent},
     {path: 'contact', component: ContactComponent},

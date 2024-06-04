@@ -3,6 +3,8 @@ package com.oop2.backend.Product.service;
 import com.oop2.backend.Product.exeption.ProductNotFoundException;
 import com.oop2.backend.Product.model.Enums.Category;
 import com.oop2.backend.Product.model.Product;
+import com.oop2.backend.Product.model.ProductRequest;
+import com.oop2.backend.Product.model.ProductResponse;
 import com.oop2.backend.Product.model.search.PagedResponse;
 import com.oop2.backend.Product.model.search.SearchRequest;
 import com.oop2.backend.Product.model.search.util.SearchRequestUtil;
@@ -57,26 +59,81 @@ public class ProductService {
      * @param id the id of a product of @{@link Long}
      * @return a @{@link Product}
      */
-    public Product getProductById(Long id) {
-        return productRepo.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " was not found"));
+    public ProductResponse getProductById(Long id) {
+        Product product = productRepo.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " was not found"));
+        ProductResponse response = ProductResponse.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .weight(product.getWeight())
+                .price(product.getPrice())
+                .currency(product.getCurrency())
+                .category(product.getCategory())
+                .imageUrl(product.getImage())
+                .build();
+
+        return response;
     }
 
     /**
      *
-     * @param product take all available information's of a @{@link Product}
+     * @param request take all available information's of a @{@link ProductRequest}
      * @return the added product
      */
-    public Product addProduct(Product product) {
-        return productRepo.save(product);
+    public ProductResponse addProduct(ProductRequest request) {
+        Product product = Product.builder()
+                .name(request.getName())
+                .description(request.getDescription())
+                .weight(request.getWeight())
+                .price(request.getPrice())
+                .currency(request.getCurrency())
+                .category(request.getCategory())
+                .image(request.getImage())
+                .build();
+
+        product = productRepo.save(product);
+
+        return ProductResponse.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .weight(product.getWeight())
+                .price(product.getPrice())
+                .currency(product.getCurrency())
+                .category(product.getCategory())
+                .imageUrl(product.getImage())
+                .build();
     }
 
     /**
      * The methode updates a product.
      *
-     * @param product takes the edit @{@link Product}
+     * @param request takes the edit @{@link ProductRequest}
      */
-    public Product updateProduct(Product product) {
-        return productRepo.save(product);
+    public ProductResponse updateProduct(ProductResponse request) {
+        Product product = Product.builder()
+                .id(request.getId())
+                .name(request.getName())
+                .description(request.getDescription())
+                .weight(request.getWeight())
+                .price(request.getPrice())
+                .currency(request.getCurrency())
+                .category(request.getCategory())
+                .image(request.getImageUrl())
+                .build();
+
+        product = productRepo.save(product);
+
+        return ProductResponse.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .weight(product.getWeight())
+                .price(product.getPrice())
+                .currency(product.getCurrency())
+                .category(product.getCategory())
+                .imageUrl(product.getImage())
+                .build();
     }
 
     /**
@@ -88,14 +145,29 @@ public class ProductService {
         productRepo.deleteById(id);
     }
 
-    // TODO: Pagination
-
     /** The methode get all products for a category or throws a @{@link ProductNotFoundException}.
      *
      * @param category @{@link Category}
      * @return a @{@link List} of products
      */
-    public List<Product> getProductsByCategory(Category category) {
-        return new ArrayList<>(productRepo.findProductsByCategory(category).orElseThrow(() -> new ProductNotFoundException("Products with " + category + " was not found or " + category + " don't exist")));
+    public List<ProductResponse> getProductsByCategory(Category category, int size) {
+        List<Product> products = new ArrayList<>(productRepo.findProductsByCategory(category).orElseThrow(() -> new ProductNotFoundException("Products with " + category + " was not found or " + category + " don't exist")));
+        List<ProductResponse> responses = new ArrayList<>();
+        products = products.subList(0, (size - 1));
+
+        for(Product product : products) {
+            responses.add(ProductResponse.builder()
+                    .id(product.getId())
+                    .name(product.getName())
+                    .description(product.getDescription())
+                    .weight(product.getWeight())
+                    .price(product.getPrice())
+                    .currency(product.getCurrency())
+                    .category(product.getCategory())
+                    .imageUrl(product.getImage())
+                    .build());
+        }
+
+        return responses;
     }
 }

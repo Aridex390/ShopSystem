@@ -1,0 +1,95 @@
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Product Details</h4>
+                    <div class="breadcrumb__links">
+                        <a routerLink="/home">Home</a>
+                        <a routerLink="/shop">Shop</a>
+                        <Span>Product Details</Span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<section class="shop spad">
+    <!-- single product -->
+	<div class="single-product mt-150 mb-150">
+		<div class="container">
+			<div class="row align-items-center justify-content-left">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div>
+                        <img src="{{product.image}}"  onerror="this.src='/assets/img/placeholder.jpg'">
+                    </div>
+                </div>
+                <div class="col-md-5 col-lg-6 col-sm-4">
+                    <div class="section-title">
+                        <h2>{{product.name}}</h2>
+                        <p>{{product.description}}</p>
+                    </div>
+                    <div class="section-title">
+                        <p><h5>{{product.price}} {{product.currency}}</h5> 
+                    </div>
+                    <form>
+                        <input type="number" class="form-control col-lg-4" max="25" min="1" value="1">
+                        <button routerLink="/shoppingCart" class="site-btn"><!--<img src="/assets/img/icon/cart.png" alt=""> -->Add to Cart</button>
+                    </form>
+                    <p><strong>Categorie: </strong>{{product.category}}</p>
+                </div>
+                <div class="single-product-form">
+                </div>
+			</div>
+		</div>
+	</div>
+	<!-- end single product -->
+    <!-- selction of products of the same categor -->
+    <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-6" *ngFor="let product of products">
+            <div class="product__item">
+                <div class="product__item__pic set-bg">
+                    <a routerLink="/shop/product/{{product.id}}"><img src="{{product.image}}" onerror="this.src='/assets/img/placeholder.jpg'"></a>
+                    <ul class="product__hover">
+                        <li><a href="#"><img src="/assets/img/icon/heart.png" alt=""></a></li>
+                        <li><a href="#"><img src="/assets/img/icon/compare.png" alt=""> <span>Compare</span></a>
+                        </li>
+                        <li><a href="#"><img src="/assets/img/icon/search.png" alt=""></a></li>
+                    </ul>
+                </div>
+                <div class="product__item__text">
+                    <h5>{{product.name}}</h5>
+                    <a href="#" class="add-cart">+ Add To Cart</a>
+                    <div class="rating">
+                        <i class="fa fa-star-o"></i>
+                        <i class="fa fa-star-o"></i>
+                        <i class="fa fa-star-o"></i>
+                        <i class="fa fa-star-o"></i>
+                        <i class="fa fa-star-o"></i>
+                    </div>
+                    <h6>{{product.price}} {{product.currency}}</h6>
+                    <div class="product__color__select">
+                        <label for="pc-22">
+                            <input type="radio" id="pc-22">
+                        </label>
+                        <label class="active black" for="pc-23">
+                            <input type="radio" id="pc-23">
+                        </label>
+                        <label class="grey" for="pc-24">
+                            <input type="radio" id="pc-24">
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end selction of products of the same categor -->
+</section>

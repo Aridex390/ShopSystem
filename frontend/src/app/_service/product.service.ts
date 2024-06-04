@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { Product } from '../_models/product.model';
 import { Observable } from 'rxjs';
 import { PagedResponse } from '../_models/paged-response.model';
+import { SearchRequest } from '../_models/search-request.model';
 
-const AUTH_API_URL = 'https://localhost:8081/user/product';
+const AUTH_API_URL = 'http://localhost:8081/user/product';
 
 
 const httpOptions = {
@@ -22,16 +23,27 @@ export class ProductService {
     const sufix: string = (page !== undefined && size != undefined)
       ? "?page=" + page + "&size=" + size
       : ""
-
+    
     return this.http.get<PagedResponse>(
       AUTH_API_URL + sufix,
       httpOptions,
     );
   };
 
-  findeProductById(id: string): Observable<Product> {
+  findProductById(id: string): Observable<Product> {
     return this.http.get<Product>(
-      AUTH_API_URL + id,
+      AUTH_API_URL + "/" + id,
+      httpOptions
+    );
+  };
+
+  findProductsByCategory(category: string, size: number): Observable<Product[]> {
+    const sufix: string = (category !== undefined && size != undefined)
+      ? "?category=" + category + "&size=" + size
+      : ""
+    
+    return this.http.get<Product[]>(
+      AUTH_API_URL + "products-by-category" + sufix,
       httpOptions
     );
   };
