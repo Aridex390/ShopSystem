@@ -13,6 +13,7 @@ Project for the uni
 3.b Falls eine extenrne datenbank verwendet wird:
      a. geben sie den Pfad zu datenbank wie folgt an: jdbc:mysql://[ip-adress zum server]:3306/ShopSystem
      b. erstellen sie ein neues Schema auf ihrem Datenbankserver mit dem name: ShopSystem
+     
 4. Starten sie den Backend-Server
 
 5. Sollte bei dem ersten start eine verbindung zur Datenbank aufgebaut werden könne,
